@@ -1,0 +1,120 @@
+#include <iostream>
+#include <string>
+using namespace std;
+int binaryToDecimal(string binary)
+{
+    int decimal = 0;
+    for(int i = 0; i < binary.length(); i++)
+    {
+        decimal = decimal * 2 + (binary[i] - '0');
+    }
+    return decimal;
+}
+string decimalToBinary(int decimal)
+{
+    string binary = "";
+    if(decimal == 0)
+        return "0";
+    while(decimal > 0)
+    {
+        int remainder = decimal % 2;
+        binary = char(remainder + '0') + binary;
+        decimal = decimal / 2;
+    }
+    return binary;
+}
+string binaryAddition(string a, string b)
+{
+    int i = a.length() - 1;
+    int j = b.length() - 1;
+    int carry = 0;
+    string result = "";
+    while(i >= 0 || j >= 0 || carry)
+    {
+        int bit1 = 0;
+        int bit2 = 0;
+        if(i >= 0)
+            bit1 = a[i--] - '0';
+        if(j >= 0)
+            bit2 = b[j--] - '0';
+        int sum = bit1 + bit2 + carry;
+        result = char((sum % 2) + '0') + result;
+        carry = sum / 2;
+    }
+    return result;
+}
+string binarySubtraction(string a, string b)
+{
+    int n = a.length();
+    while(b.length() < n)
+        b = "0" + b;
+    for(int i = 0; i < b.length(); i++)
+    {
+        if(b[i] == '0')
+            b[i] = '1';
+        else
+            b[i] = '0';
+    }
+    string one = "1";
+    b = binaryAddition(b, one);
+    string result = binaryAddition(a, b);
+    if(result.length() > n)
+        result = result.substr(result.length() - n);
+    return result;
+}
+int main()
+{
+    int choice;
+    do
+    {
+        cout << "\n===== BINARY CALCULATOR =====" << endl;
+        cout << "1. Binary to Decimal" << endl;
+        cout << "2. Decimal to Binary" << endl;
+        cout << "3. Binary Addition" << endl;
+        cout << "4. Binary Subtraction" << endl;
+        cout << "5. Exit" << endl;
+        cout << "Enter your choice: ";
+        cin >> choice;
+        if(choice == 1)
+        {
+            string binary;
+            cout << "Enter binary number: ";
+            cin >> binary;
+            cout << "Decimal = " << binaryToDecimal(binary) << endl;
+        }
+        else if(choice == 2)
+        {
+            int decimal;
+            cout << "Enter decimal number: ";
+            cin >> decimal;
+            cout << "Binary = " << decimalToBinary(decimal) << endl;
+        }
+        else if(choice == 3)
+        {
+            string a, b;
+            cout << "Enter first binary number: ";
+            cin >> a;
+            cout << "Enter second binary number: ";
+            cin >> b;
+            cout << "Sum = " << binaryAddition(a, b) << endl;
+        }
+        else if(choice == 4)
+        {
+            string a, b;
+            cout << "Enter minuend: ";
+            cin >> a;
+            cout << "Enter subtrahend: ";
+            cin >> b;
+            cout << "Difference = " << binarySubtraction(a, b) << endl;
+        }
+        else if(choice == 5)
+        {
+            cout << "Program ended." << endl;
+        }
+        else
+        {
+            cout << "Invalid choice!" << endl;
+        }
+    } while(choice != 5);
+    return 0;
+}
